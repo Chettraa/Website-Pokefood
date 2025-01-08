@@ -17,3 +17,10 @@ def book(request):
 
 def menu(request):
     return render(request, 'pokefood_app/menu.html')
+
+
+def log_in(request):
+    return render(request, 'pokefood_app/log_in.html')
+
+def register(request):
+    return render(request, 'pokefood_app/register.html')
