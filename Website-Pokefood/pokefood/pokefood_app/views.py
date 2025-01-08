@@ -58,16 +58,26 @@ def login_view(request):
     return render(request, 'pokefood_app/login.html', {'form': form})
 
 
+from .form import RegisterForm
+from .models import RegisterRecord
+
 def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            user = User.objects.create_user(
-                username=form.cleaned_data['username'],
-                email=form.cleaned_data['email'],
-                password=form.cleaned_data['password1']
-            )
-            messages.success(request, "Registration successful!")
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password1']
+
+            # Create the user
+            user = User.objects.create_user(username=username, email=email, password=password)
+            user.save()
+
+            # Create a registration record in the database
+            ip_address = get_client_ip(request)
+            RegisterRecord.objects.create(user=user, email=email, ip_address=ip_address)
+
+            messages.success(request, "Registration successful! You can now log in.")
             return redirect('login')
         else:
             messages.error(request, form.errors)
