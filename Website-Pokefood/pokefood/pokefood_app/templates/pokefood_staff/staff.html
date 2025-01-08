@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Records</title>
+</head>
+<body>
+    <h2>Login Records</h2>
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Login Time</th>
+            <th>IP Address</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.user.username }}</td>
+            <td>{{ record.login_time }}</td>
+            <td>{{ record.ip_address }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

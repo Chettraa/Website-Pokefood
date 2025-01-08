@@ -115,19 +115,42 @@
         </div>
         <div class="input-group">
           <label for="password" class="input-label">Password</label>
-          <input
+            <input
             type="password"
             id="password"
             name="password"
             class="input-field"
             placeholder="Enter your password"
-          />
-        </div>
-        <button type="submit" class="submit-button">Login</button>
-      </form>
-      <p class="footer-text">
-        Don’t have an account? <a href="#">Create new account.</a>
-      </p>
-    </div>
-  </body>
-</html>
+            />
+            </div>
+            <button type="submit" class="submit-button">Login</button>
+          </form>
+          <p class="footer-text"></p>
+            Don’t have an account? <a href="{% url 'register' %}">Create new account.</a>
+          </p>
+          </div>
+          <script>
+          document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch("{% url 'login' %}", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+              email: document.getElementById('email').value,
+              password: document.getElementById('password').value
+            })
+            })
+            .then(response => response.json())
+            .then(data => {
+            if (data.success) {
+              window.location.href = "{% url 'index' %}";
+            } else {
+              alert('Invalid credentials, please try again. Your email or password is wrong or you are not registered yet.');
+            }
+            })
+            .catch(error => console.error('Error:', error));
+          });
+          </script>
