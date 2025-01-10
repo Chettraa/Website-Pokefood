@@ -102,7 +102,13 @@
         src="{% static 'images/pikachu-pokeball.png' %}"
         alt="Pikachu on Pokeball"
         class="pikachu-image"
+        onload="hideBackground()"
       />
+      <script>
+        function hideBackground() {
+          document.body.style.backgroundColor = 'transparent';
+        }
+      </script>
       <h2 class="login-title">Welcome to Pokéfood</h2>
       {% if messages %}
         <ul class="error-message">

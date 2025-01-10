@@ -1,6 +1,7 @@
 from django.urls import path
 from pokefood_app import views
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path(route="", view=views.index, name="index"),
     path(route="about/", view=views.about, name="about"),
@@ -9,4 +10,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
     path('logout/', views.logout_view, name='logout'),
-]
+    path('profile/', views.profile, name='profile'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

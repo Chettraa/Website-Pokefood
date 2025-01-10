@@ -9,7 +9,7 @@ from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import LoginRecord
+from .models import LoginRecord, UserProfile
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.forms import UserCreationForm
 
@@ -97,7 +97,14 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
-
+@login_required
+def profile(request):
+    try:
+        profile = request.user.profile
+    except UserProfile.DoesNotExist:
+        # Optionally create the profile here if it's critical
+        profile = UserProfile.objects.create(user=request.user)
+    return render(request, 'pokefood_app/user_profile.html', {'profile': profile})
 
 @staff_member_required
 def login_records_view(request):

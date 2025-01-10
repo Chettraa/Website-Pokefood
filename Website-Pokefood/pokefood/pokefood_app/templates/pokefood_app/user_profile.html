@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokefood - Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        background-color: #f0f8ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .profile-container {
+        background-color: white;
+        padding: 2.5rem 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+      }
+      .profile-image {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto 20px;
+        border: 3px solid #ffcc00;
+      }
+      .profile-title {
+        font-size: 26px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+      }
+      .profile-detail {
+        font-size: 16px;
+        color: #34495e;
+        margin: 10px 0;
+      }
+      .logout-button {
+        width: 100%;
+        padding: 0.8rem;
+        margin-top: 1.5rem;
+        background-color: #e74c3c;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+      }
+      .logout-button:hover {
+        background-color: #c0392b;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div class="profile-container">
+        {% if avatar_url %}
+          <img src="{{ avatar_url }}" alt="Profile Image" class="profile-image" />
+        {% else %}
+          <img src="{% static 'images/avatar.png' %}" alt="Default Avatar" class="profile-image" />
+        {% endif %}
+        <h2 class="profile-title">{{ user.get_full_name }}</h2>
+        <p class="profile-detail">Email : {{ user.email }}</p>
+        <p class="profile-detail">Date of Birth: {{ user.profile.date_of_birth }}</p>
+        <p class="profile-detail">Phone Number: {{ user.profile.phone_number }}</p>
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="logout-button">Logout</button>
+        </form>
+      </div>
+  </body>
+</html>
