@@ -1,0 +1,84 @@
+{% extends 'pokefood_app/base.html' %}
+{% load static %}
+{% load custom_filters %} {# Load custom filters if you have any #}
+
+{% block content %}
+<body class="sub_page">
+  <div class="hero_area">
+    <div class="bg-box">
+      <img src="{% static 'images/hero-bg.jpg' %}" alt="">
+    </div>
+    {% include 'pokefood_app/header.html' %}
+  </div>
+
+  <section class="order_form_section layout_padding">
+    <div class="container">
+      <h2>Order Now</h2>
+
+      {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if request.session.cart %} {# Check if the cart is not empty #}
+      <form action="{% url 'process_order' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter Your Name" required class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter Your Email" required class="form-control">
+          </div>
+          <div class="col-md-12">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter Your Phone Number" required class="form-control">
+          </div>
+          <div class="col-md-12">
+            <label for="address">Delivery Address:</label>
+            <textarea id="address" name="address" placeholder="Enter Your Delivery Address" required class="form-control"></textarea>
+          </div>
+
+          <div class="col-md-12">
+            <h4>Order Items</h4>
+            <ul class="order-items-list">
+              {% for item_id, item_data in request.session.cart.items %}
+                {% with product=products|get_item:item_id %} {# Get product instance #}
+                  {% if product %} {# Check if the product exists #}
+                    <li>
+                      <span class="item-name">{{ product.name }}</span>
+                      <span class="item-quantity">x{{ item_data.quantity }}</span>
+                      <span class="item-price">${{ product.price }}</span>
+                      <span class="item-subtotal">${{ product.price|multiply:item_data.quantity }}</span> {# Calculate subtotal #}
+                    </li>
+                  {% else %}
+                    <li>Product with ID {{ item_id }} not found.</li>
+                  {% endif %}
+                {% endwith %}
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="col-md-12">
+            <p class="total-price">Total: $<span id="total-price">{{ total }}</span></p>
+          </div>
+
+          <div class="col-md-12">
+            <button type="submit" class="btn btn-primary">Place Order</button>
+          </div>
+        </div>
+      </form>
+      {% else %}
+        <p>Your cart is empty. <a href="{% url 'menu' %}">Go to the menu to add items.</a></p>
+      {% endif %}
+    </div>
+  </section>
+
+  {% include 'pokefood_app/footer.html' %}
+</body>
+{% endblock %}

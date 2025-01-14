@@ -11,4 +11,6 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile, name='profile'),
+    path('order/', views.order_view, name='order'), # New URL for the order page
+    path('process_order/', views.process_order, name='process_order'), # URL for processing the order
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
